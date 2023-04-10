@@ -53,12 +53,12 @@ try:
     f.close()
     time.sleep (1)
 
-    # run the code
-    print('Running code')
-    ser.write (b'j 0x40000\r\n')
-    
     # escape ZDI mode
     ser.write (b'\x1b') # send ESC to exit ZDI
+    
+    # run the code
+    print('Running code')
+    ser.write (b'RUN &40000\r\n')
     
     print('Done')
 except serial.SerialException:
