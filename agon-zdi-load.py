@@ -13,19 +13,23 @@ import os.path
 ## 
 
 if len(sys.argv) == 1 or len(sys.argv) >4:
-  sys.exit('Usage: agon-zdi-load.py FILENAME <PORT> <BAUDRATE>')
+  sys.exit('Usage: agon-zdi-load.py FILENAME START <PORT> <BAUDRATE>')
 
 if not os.path.isfile(sys.argv[1]):
   sys.exit(f'Error: file \'{sys.argv[1]}\' not found')
 
-if len(sys.argv) == 2:
+if len(sys.argv) < 3:
+  sys.exit (f'Error: please specify start address')
+
+if len(sys.argv) == 3:
+  startaddress = sys.argv[2]
   serialport = '/dev/tty.usbserial-212220'
 
-if len(sys.argv) >= 3:
-  serialport = sys.argv[2]
+if len(sys.argv) >= 4:
+  serialport = sys.argv[3]
 
-if len(sys.argv) == 4:
-  baudrate = int(sys.argv[3])
+if len(sys.argv) == 5:
+  baudrate = int(sys.argv[4])
 else:
   baudrate = 115200
 
@@ -55,10 +59,13 @@ try:
 
     # escape ZDI mode
     ser.write (b'\x1b') # send ESC to exit ZDI
+    time.sleep (0.2)
     
     # run the code
     print('Running code')
-    ser.write (b'RUN &40000\r\n')
+    ser.write (str('RUN &').encode('ascii'))
+    ser.write (str(startaddress).encode('ascii'))
+    ser.write (b'\r\n')
     
     print('Done')
 except serial.SerialException:
