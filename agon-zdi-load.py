@@ -52,14 +52,14 @@ try:
     for line in content:
         ser.write(str(line).encode('ascii'))
         ser.write (b'\r\n')
-        time.sleep (0.1)
+        time.sleep (0.05)
 
     f.close()
-    time.sleep (1)
+    time.sleep (0.2)
 
     # escape ZDI mode
     ser.write (b'\x1b') # send ESC to exit ZDI
-    time.sleep (0.2)
+    time.sleep (1)
     
     # run the code
     print('Running code')
