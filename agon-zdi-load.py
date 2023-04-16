@@ -56,16 +56,17 @@ try:
 
     f.close()
     time.sleep (0.2)
-
-    # escape ZDI mode
-    ser.write (b'\x1b') # send ESC to exit ZDI
-    time.sleep (1)
     
     # run the code
-    print('Running code')
-    ser.write (str('RUN &').encode('ascii'))
-    ser.write (str(startaddress).encode('ascii'))
-    ser.write (b'\r\n')
+    if int(startaddress)>0:
+      # escape ZDI mode
+      ser.write (b'\x1b') # send ESC to exit ZDI
+      time.sleep (1)
+      #
+      print('Running code')
+      ser.write (str('RUN &').encode('ascii'))
+      ser.write (str(startaddress).encode('ascii'))
+      ser.write (b'\r\n')
     
     print('Done')
 except serial.SerialException:
